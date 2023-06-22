@@ -53,6 +53,7 @@ namespace User_Mgmt_Api.Controllers
 			List<Claim> claims = new List<Claim>()
 			{
 				new Claim(ClaimTypes.Name, userLogin.UserName),
+				new Claim(ClaimTypes.Role,"Admin")
 			};
 			var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
 				configuration.GetSection("AppSettings:Token").Value

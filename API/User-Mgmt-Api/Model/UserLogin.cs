@@ -5,6 +5,7 @@ namespace User_Mgmt_Api.Model
 {
 	public class UserLogin
 	{
+		//this is saving in db
 		public string UserName { get; set; }=string.Empty;
 		public byte[] PasswordHash { get; set; }
 		public byte[] PasswordSalt { get; set; }

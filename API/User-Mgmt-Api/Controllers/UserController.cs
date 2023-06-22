@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using User_Mgmt_Api.Model;
 using User_Mgmt_Api.Model.DTO;
 using User_Mgmt_Api.Repository;
@@ -21,7 +22,9 @@ namespace User_Mgmt_Api.Controllers
             var users = await userRepository.GetAllAsync();
             return Ok(users);
         }
-        [HttpGet]
+		//in token no role as claim then 403 forbidden
+		//in token role is diff then 403 forbidden
+		[HttpGet,Authorize(Roles ="Admin")]
         public async Task<ActionResult> GetUser(Guid id)
         {
             var user=await userRepository.GetByIdAsync(id);
