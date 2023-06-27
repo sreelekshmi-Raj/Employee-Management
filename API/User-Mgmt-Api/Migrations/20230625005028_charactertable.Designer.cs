@@ -12,8 +12,8 @@ using User_Mgmt_Api.Data;
 namespace User_Mgmt_Api.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230621145140_UserLoginTableAdded")]
-    partial class UserLoginTableAdded
+    [Migration("20230625005028_charactertable")]
+    partial class charactertable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,6 +23,32 @@ namespace User_Mgmt_Api.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("User_Mgmt_Api.Model.Character", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RpgClass")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("Userid")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Userid");
+
+                    b.ToTable("Characters");
+                });
 
             modelBuilder.Entity("User_Mgmt_Api.Model.User", b =>
                 {
@@ -64,6 +90,9 @@ namespace User_Mgmt_Api.Migrations
 
             modelBuilder.Entity("User_Mgmt_Api.Model.UserLogin", b =>
                 {
+                    b.Property<DateTime>("Expires")
+                        .HasColumnType("datetime2");
+
                     b.Property<byte[]>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
@@ -72,11 +101,34 @@ namespace User_Mgmt_Api.Migrations
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<string>("RefreshToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("TokenCreated")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.ToTable("userLogins");
+                });
+
+            modelBuilder.Entity("User_Mgmt_Api.Model.Character", b =>
+                {
+                    b.HasOne("User_Mgmt_Api.Model.User", "user")
+                        .WithMany("characters")
+                        .HasForeignKey("Userid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("user");
+                });
+
+            modelBuilder.Entity("User_Mgmt_Api.Model.User", b =>
+                {
+                    b.Navigation("characters");
                 });
 #pragma warning restore 612, 618
         }

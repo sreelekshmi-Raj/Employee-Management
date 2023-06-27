@@ -15,8 +15,9 @@ namespace User_Mgmt_Api.Model
         public int PostalCode { get; set; }
         public string Country { get; set; }
         public string Phone { get; set; }
+        public List<Character> characters { get; set; }
 
-       
+
 
 
     }
